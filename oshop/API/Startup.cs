@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Helpers;
 using Core;
+
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +39,7 @@ namespace API
 
             services.AddControllers();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddDbContext<StoreContext>(option => option.UseSqlite(_config.GetConnectionString("DefaltConnection")));
             services.AddSwaggerGen(c =>
             {
@@ -57,6 +60,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
