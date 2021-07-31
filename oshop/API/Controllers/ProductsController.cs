@@ -4,10 +4,14 @@ using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Core;
 using API.Dtos;
-using System.Linq;
+
 using AutoMapper;
 using API.Errors;
 using Microsoft.AspNetCore.Http;
+
+using Core.Helpers;
+using API.Helpers;
+using API.Extentions;
 
 namespace API.Controllers
 {
@@ -25,10 +29,13 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<PagedList<ProductToReturnDto>>> GetProducts([FromQuery] UserParams userParams)
         {
-            var products = await _productsRepo.GetProductsAsync();
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+            var products = await _productsRepo.GetProductsAsync(userParams);
+            Response.AddPaginationHeaders(products.CurrentPage,products.PageSize,products.TotalCount,products.TotalPages);
+            return Ok(products);
+            
+            //return Ok(_mapper.Map<PagedList<Product>, PagedList<ProductToReturnDto>>(products));
         }
 
         [HttpGet("{id}")]
