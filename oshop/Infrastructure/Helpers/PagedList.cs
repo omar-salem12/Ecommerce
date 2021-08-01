@@ -7,25 +7,37 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Helpers
 {
   
-         public class PagedList<T> : List<T>
+         public class PagedList<T> 
     {
         public PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
         {
             TotalCount = count;
-            pageNumber = CurrentPage;
+            PageNumber = pageNumber;
             PageSize = pageSize;
             TotalPages =(int)Math.Ceiling(count / (double)pageSize);
-            AddRange(items);
+           
+
+          
+
+               this.items = items;
+
+
+              
         }
 
-        public int CurrentPage { get; set; }
 
-        public int TotalPages { get; set; }
+               
+         // public PaginationHeaders paginationsMetaData { get; set; }
+          
+            public int TotalCount { get; set; }
 
-        public int PageSize { get; set; }
+            public int PageNumber { get; set; }
 
-        public int TotalCount { get; set; }
+            public int PageSize { get; set; }
 
+            public int TotalPages { get; set; }
+
+          public IEnumerable<T> items { get; set; }
 
           public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int PageNumber,int PageSize) 
           {

@@ -9,8 +9,8 @@ using Core.Helpers;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using API.Dtos;
+using AutoMapper.QueryableExtensions;
 
 namespace Infrastructure
 {
@@ -73,7 +73,7 @@ namespace Infrastructure
             return await PagedList<ProductToReturnDto>.CreateAsync(query2,userParams.PageNumber,userParams.PageSize);
 
 
-            //return await query.Include(p => p.ProductType).Include(p =>p.ProductBrand).ToListAsync();
+           
 
         }
 

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 
 using Core.Helpers;
 using API.Helpers;
-using API.Extentions;
+
 
 namespace API.Controllers
 {
@@ -32,10 +32,10 @@ namespace API.Controllers
         public async Task<ActionResult<PagedList<ProductToReturnDto>>> GetProducts([FromQuery] UserParams userParams)
         {
             var products = await _productsRepo.GetProductsAsync(userParams);
-            Response.AddPaginationHeaders(products.CurrentPage,products.PageSize,products.TotalCount,products.TotalPages);
             return Ok(products);
+           
             
-            //return Ok(_mapper.Map<PagedList<Product>, PagedList<ProductToReturnDto>>(products));
+           // return Ok(products);
         }
 
         [HttpGet("{id}")]
