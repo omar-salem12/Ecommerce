@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using API.Dtos;
 using AutoMapper.QueryableExtensions;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure
 {
@@ -18,11 +19,13 @@ namespace Infrastructure
     {
         private readonly StoreContext _storeContext;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _config;
 
-        public ProductRepository(StoreContext storecontext, IMapper mapper)
+        public ProductRepository(StoreContext storecontext, IMapper mapper, IConfiguration config)
         {
             _storeContext = storecontext;
             _mapper = mapper;
+            _config = config;
         }
 
         public async Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync()
@@ -46,10 +49,11 @@ namespace Infrastructure
             var query =  _storeContext.Products.AsQueryable();
 
             query = userParams.OrderBy switch {
-                "priceAsc" => query.OrderBy(p => p.Price),
+                 "priceAsc" => query.OrderBy(p => p.Price),
                  "priceDes" => query.OrderByDescending( p =>p.Price),
                  _ => query.OrderBy(p =>p.Name)
             };
+            
 
             if(userParams.TypeId != null) 
             {
@@ -67,8 +71,16 @@ namespace Infrastructure
             }
 
 
-            query =  query.Include(p => p.ProductType).Include(p =>p.ProductBrand);
-           var query2 = query.ProjectTo<ProductToReturnDto>(_mapper.ConfigurationProvider);
+          var   query2 =  query.Include(p => p.ProductType).Include(p =>p.ProductBrand).Select(p => new ProductToReturnDto{
+                Id=p.Id,
+               Name = p.Name,
+               Description = p.Description,
+               Price = p.Price,
+               PictureUrl= _config["APiUrl"] + p.PictureUrl,
+               ProductType = p.ProductType.Name,
+               ProductBrand = p.ProductBrand.Name
+
+            });
 
             return await PagedList<ProductToReturnDto>.CreateAsync(query2,userParams.PageNumber,userParams.PageSize);
 

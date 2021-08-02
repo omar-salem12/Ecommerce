@@ -32,22 +32,20 @@ namespace API.Controllers
         public async Task<ActionResult<PagedList<ProductToReturnDto>>> GetProducts([FromQuery] UserParams userParams)
         {
             var products = await _productsRepo.GetProductsAsync(userParams);
-            return Ok(products);
-           
             
-           // return Ok(products);
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
-        {
+          {
                 var product = await _productsRepo.GetProductByIdAsync(id);
                 if(product == null) return NotFound( new ApiResponse(404));
                  return _mapper.Map<Product,ProductToReturnDto>(product);
      
-        }
+         }
 
 
         [HttpGet("brands")]
