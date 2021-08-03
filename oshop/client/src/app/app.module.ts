@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
-import { ShopModule } from './shop/shop.module';
 
 
 @NgModule({
@@ -14,15 +13,13 @@ import { ShopModule } from './shop/shop.module';
     AppComponent,
 
   ],
+
   imports: [
-BrowserModule,
+     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     CoreModule,
-    ShopModule
-
-
 
   ],
   providers: [],
