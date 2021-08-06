@@ -13,10 +13,10 @@ import { ShopParams } from './../shared/models/shopParams';
 })
 
 export class ShopComponent implements OnInit {
-  @ViewChild('search',{static:true}) searchTerm!: ElementRef
-  products: IProduct[] = [];
-  brands: IProductBrand[] = [];
-  types: IProductType[] = []
+  @ViewChild('search',{static:false}) searchTerm!: ElementRef
+  products: IProduct[]
+  brands: IProductBrand[]
+  types: IProductType[]
   shopParams = new ShopParams();
   totalCount! : number;
 

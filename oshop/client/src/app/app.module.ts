@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {  NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule, HTTP_INTERCEPTORS} from"@angular/common/http"
 
@@ -7,6 +7,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { ErrorInterceptorInterceptor } from './core/interceptors/error-interceptor.interceptor';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
+import { AlertModule } from 'ngx-bootstrap/alert';
+
+
 
 
 @NgModule({
@@ -16,16 +21,21 @@ import { ErrorInterceptorInterceptor } from './core/interceptors/error-intercept
   ],
 
   imports: [
-   BrowserModule,
+    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     CoreModule,
+    NgxSpinnerModule,
+    AlertModule.forRoot()
 
   ],
   providers: [
-    {provide:HTTP_INTERCEPTORS, useClass:ErrorInterceptorInterceptor,multi:true}
+    {provide:HTTP_INTERCEPTORS, useClass:ErrorInterceptorInterceptor,multi:true},
+    {provide:HTTP_INTERCEPTORS, useClass:LoadingInterceptor,multi:true}
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+
+
 })
 export class AppModule { }
