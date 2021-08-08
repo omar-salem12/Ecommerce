@@ -5,6 +5,7 @@ import { PagingHeaderComponent } from './components/paging-header/paging-header.
 import { PagerComponent } from './components/pager/pager.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { OrderTotalsComponent } from './components/order-totals/order-totals.component';
 
 
 
@@ -12,6 +13,7 @@ import { AlertModule } from 'ngx-bootstrap/alert';
   declarations: [
     PagingHeaderComponent,
     PagerComponent,
+    OrderTotalsComponent,
 
   ],
   imports: [
@@ -24,7 +26,8 @@ import { AlertModule } from 'ngx-bootstrap/alert';
   exports: [PaginationModule,
             PagingHeaderComponent,
             PagerComponent,
-          CarouselModule,
+            CarouselModule,
+            OrderTotalsComponent
        ],
 
 })

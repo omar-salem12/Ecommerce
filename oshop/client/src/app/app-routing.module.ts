@@ -8,7 +8,15 @@ import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {path: '', component:HomeComponent,data:{breadcrumb: 'Home'}},
-  {path:'shop', loadChildren:() => import('./shop/shop.module').then(m => m.ShopModule), data:{breadcrumb:{label:'shop'}}},
+  {path:'shop', loadChildren:() => import('./shop/shop.module').then(m => m.ShopModule),
+  data:{breadcrumb:{label:'shop'}}},
+
+  {path:'basket', loadChildren:() => import('./basket/basket.module').then(m => m.BasketModule),
+    data:{breadcrumb:{label:'basket'}}},
+
+    {path:'checkout', loadChildren:() => import('./checkout/checkout.module').then(m => m.CheckoutModule),
+    data:{breadcrumb:{label:'checkout'}}},
+
   {path: 'test-error', component:TestErrorComponent,data:{breadcrumb:'Test Errors'}},
   {path:'server-error', component:ServerErrorComponent,data:{breadcrumb:'Server Error'}},
   {path:'not-found',component:NotFoundComponent, data:{breadcrumb:'Not Found'}},
