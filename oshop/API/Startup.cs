@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using API.Errors;
+using API.Extentions;
 using API.Helpers;
 using API.Middleware;
 using Core;
 using Infrastructure;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,16 +38,23 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
+
+       
             services.AddControllers();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddDbContext<StoreContext>(option => option.UseSqlite(_config.GetConnectionString("DefaltConnection")));
+          
+           services.AddDbContext<AppIdentityDbContext>(X =>X.UseSqlite(_config.GetConnectionString("IdentityConnection")));
+            
             services.AddSingleton<IConnectionMultiplexer>(c => {
                 var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
-
+            
+             services.AddIdentityServices(_config);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -82,7 +91,7 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-
+            
               app.UseSwagger();
              app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
              
@@ -101,6 +110,8 @@ namespace API
             app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
