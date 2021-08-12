@@ -34,7 +34,6 @@ namespace API.Controllers
         }
 
 
-
        [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentuser()
@@ -64,16 +63,13 @@ namespace API.Controllers
       public async Task<ActionResult<AddressDto>> GetUserAddress()
       {
             
-
              var user = await _userManager.FindByEmailWithAddressAsync(User);
-
              return _mapper.Map<Address,AddressDto>(user.Address);
-
       }
+
 
      [Authorize]
      [HttpPut("address")]
-
      public async Task<ActionResult<AddressDto>> UpdateUserAdress(AddressDto address) 
      {
 
@@ -120,6 +116,17 @@ namespace API.Controllers
      [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
+
+         
+          if(CheckEmailExistsAsync(registerDto.Email).Result.Value)
+          {
+
+              return new  BadRequestObjectResult(new ApiValidationErrorResponse{Errors = 
+
+                 new[] {"Email address is in use"} });
+          }
+          
+
             var user = new AppUser
             { 
                   DisplayName = registerDto.DisplayName,
@@ -139,5 +146,6 @@ namespace API.Controllers
                 Email = user.Email
             };
         }
+        
     }
 }
